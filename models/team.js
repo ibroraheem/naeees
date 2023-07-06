@@ -70,8 +70,13 @@ const TeamSchema = new mongoose.Schema({
                 required: true
             }
         }
-    ]
+    ],
+    isQualified: {
+        type: Boolean,
+        default: false
+    },
 },
+
     { timestamps: true });
 
 const Team = mongoose.model('Team', TeamSchema);

@@ -30,7 +30,14 @@ const registerIndividual = async (req, res) => {
             subject: 'Confirmation of Registration',
             html: `
             <p>Dear ${name},</p>
-            <p>This is to notify you that you have registered successfully for the NAEEES Hackathon 2023</p>`
+            <p>We hope this email finds you well. We are thrilled to see your enthusiasnm for the upcoming NAEEES Hackathon. We want to provide you with some important updates and share additional resources to enhance your participation.</p>
+            <ol>
+            <li>Information Packet:<br> To help you prepare effectively for the hackathon, we have compile all the essential details, including the event schedule, rules, and guidelines in a comprehensive information packet. You can access the information packet by clicking on this <a href="https://drive.google.com/drive/folders/1KvvF5mRKBQ43ccr37Hz0iN3dY7S9A9jV">link</a>.</li>
+            <li>WhatsApp Group: We believe that effective communication and collaboration are key to a successful hackathon experience. Therefor, we have created a dedicated WhatsApp group for all participants. This group will serve as a platform for sharing updates and networking. You can join the group by clicking this <a href="https://chat.whatsapp.com/GMboWMcK0MmIwPO1SJdMMY">link</a><br> We encourage you to join the group as soon as possible to stay connected and engage with the organizers</li> 
+            </ol>
+            <p>We will be excited to witness your innovative ideas and solutions during the NAEEES Hackathon. Wishing you the best of luck with your preparations, and we look forward to an inspiring event together!</p>
+            <p>Best Regards,</p>
+            <p>NAEEES Hackathon Team</p>`
         }
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
@@ -105,8 +112,13 @@ const registerTeam = async (req, res) => {
             subject: 'Registration Successful',
             html: `<h1>Registration Successful</h1>
             <p>Dear ${members[0].name},</p>
-            <p>Your registration was successful. You will be contacted with further instructions.</p>
-            <p>Regards,</p>
+            <p>We hope this email finds you well. We are thrilled to see your enthusiasnm for the upcoming NAEEES Hackathon. We want to provide you with some important updates and share additional resources to enhance your participation.</p>
+            <ol>
+            <li>Information Packet:<br> To help you prepare effectively for the hackathon, we have compile all the essential details, including the event schedule, rules, and guidelines in a comprehensive information packet. You can access the information packet by clicking on this <a href="https://drive.google.com/drive/folders/1KvvF5mRKBQ43ccr37Hz0iN3dY7S9A9jV">link</a>.</li>
+            <li>WhatsApp Group: We believe that effective communication and collaboration are key to a successful hackathon experience. Therefor, we have created a dedicated WhatsApp group for all participants. This group will serve as a platform for sharing updates and networking. You can join the group by clicking this <a href="https://chat.whatsapp.com/GMboWMcK0MmIwPO1SJdMMY">link</a><br> We encourage you to join the group as soon as possible to stay connected and engage with the organizers</li> 
+            </ol>
+            <p>We will be excited to witness your innovative ideas and solutions during the NAEEES Hackathon. Wishing you the best of luck with your preparations, and we look forward to an inspiring event together!</p>
+            <p>Best Regards,</p>
             <p>NAEEES Hackathon Team</p>`
         }
         transporter.sendMail(mailOptions, (error, info) => {
@@ -401,6 +413,7 @@ const dumpTeam = async (req, res) => {
 const emailDump = async (req, res) => {
     try {
         const individual = await Individual.find()
+        const team = await Team.find()
         //send email to all individuals
         const data = individual.map((item) => {
             return {
@@ -421,33 +434,25 @@ const emailDump = async (req, res) => {
         })
         const mailOptions = {
             from: process.env.EMAIL,
-            to: `${data.map((item) => item.email)}`,
-            subject: 'Confirmation of Registration and Further Instructions',
-            html: `<p>This is to notify you of your successful application to participate in the first stage of EPEX 2023.</p>
-            <p> You are hereby required to IMMEDIATELY do the following:<br></p>
-            <p><ol>
-            <li>Take a snapshot of yourself and post on Instagram, Twitter or LinkedIn with the following caption “I have just been shortlisted to participate in the Engineering Projects Exhibition organized by the NUESA University of Ilorin Chapter tagged EPEX 2023, and I am excited to showcase my innovative skills” with the hashtags #EPEX2023, #EPEXSERIES, #EPEXNUESAUNILORIN, #UNILORIN, #epex, #tech, #exhibition.
-            Also, post the EPEX flyer attached to the email, together with the link to the prospectus alongside with your picture, and tag @epexseries on any of the media.</li> <br>
-            <li>Join the WhatsApp group for the participants through this <a href="https://chat.whatsapp.com/JbJBueP6xJ8D7LgJM8ZLRp">link</a> </li></p>
-            <p>It is important to note that your performance at the virtual preliminary stages will qualify you for the physical final stage, so we encourage you to give the preliminary stages your best effort.</p>
-            <p>Here’s the link to the prospectus and the EPEX flyer attached:<br>
-            <a href="bit.ly/EPEX_2023_Info_Packet">bit.ly/EPEX_2023_Info_Packet</a></p>
-            <p>Further Information would be communicated to you. <br>
-            Once again, welcome to the Engineering Projects Exhibition 2023. We are glad to have you!<p>
-            <p>EPEX 2023 ORGANIZING COMMITTEE…</p>`,
-            attachments: [{
-                filename: 'flyer.jpg',
-                path: './images/flyer.jpg',
-                cid: 'flyer'
-            }]
+            to: `${individual.map((item) => item.email).join(',')}, ${team.map((item) => item.members[0].email).join(',')}`,
+            subject: "Important Updates: NAEEES Hackathon Application",
+            html: `<p>Dear Applicant,</p>
+            <p>We hope this email finds you well. We are thrilled to see your enthusiasnm for the upcoming NAEEES Hackathon. We want to provide you with some important updates and share additional resources to enhance your participation.</p>
+            <ol>
+            <li>Information Packet:<br> To help you prepare effectively for the hackathon, we have compile all the essential details, including the event schedule, rules, and guidelines in a comprehensive information packet. You can access the information packet by clicking on this <a href="https://drive.google.com/drive/folders/1KvvF5mRKBQ43ccr37Hz0iN3dY7S9A9jV">link</a>.</li>
+            <li>WhatsApp Group: We believe that effective communication and collaboration are key to a successful hackathon experience. Therefor, we have created a dedicated WhatsApp group for all participants. This group will serve as a platform for sharing updates and networking. You can join the group by clicking this <a href="https://chat.whatsapp.com/GMboWMcK0MmIwPO1SJdMMY">link</a><br> We encourage you to join the group as soon as possible to stay connected and engage with the organizers</li> 
+            </ol>
+            <p>We will be excited to witness your innovative ideas and solutions during the NAEEES Hackathon. Wishing you the best of luck with your preparations, and we look forward to an inspiring event together!</p>
+            <p>Best Regards,</p>
+            <p>NAEEES Hackathon Team</p>`
         }
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
                 console.log(error)
-            } else {
-                console.log('Email sent: ' + info.response)
-                res.status(200).json({ message: 'Success' })
+                return res.status(500).json({ msg: error.message })
             }
+            console.log('Email sent: ' + info.response)
+            res.status(200).json({ message: 'Success' })
         })
     }
     catch (error) {
