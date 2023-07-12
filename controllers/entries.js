@@ -26,7 +26,7 @@ const registerIndividual = async (req, res) => {
         })
         const mailOptions = {
             from: process.env.EMAIL,
-            to: Email,
+            to: email,
             subject: 'Confirmation of Registration',
             html: `
             <p>Dear ${name},</p>
@@ -425,6 +425,8 @@ const emailDump = async (req, res) => {
                 phoneNumber: item.phoneNumber,
             }
         })
+
+
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -434,18 +436,39 @@ const emailDump = async (req, res) => {
         })
         const mailOptions = {
             from: process.env.EMAIL,
-            to: `${individual.map((item) => item.email).join(',')}, ${team.map((item) => item.members[0].email).join(',')}`,
-            subject: "Important Updates: NAEEES Hackathon Application",
-            html: `<p>Dear Applicant,</p>
-            <p>We hope this email finds you well. We are thrilled to see your enthusiasnm for the upcoming NAEEES Hackathon. We want to provide you with some important updates and share additional resources to enhance your participation.</p>
-            <ol>
-            <li>Information Packet:<br> To help you prepare effectively for the hackathon, we have compile all the essential details, including the event schedule, rules, and guidelines in a comprehensive information packet. You can access the information packet by clicking on this <a href="https://drive.google.com/drive/folders/1KvvF5mRKBQ43ccr37Hz0iN3dY7S9A9jV">link</a>.</li>
-            <li>WhatsApp Group: We believe that effective communication and collaboration are key to a successful hackathon experience. Therefor, we have created a dedicated WhatsApp group for all participants. This group will serve as a platform for sharing updates and networking. You can join the group by clicking this <a href="https://chat.whatsapp.com/GMboWMcK0MmIwPO1SJdMMY">link</a><br> We encourage you to join the group as soon as possible to stay connected and engage with the organizers</li> 
-            </ol>
-            <p>We will be excited to witness your innovative ideas and solutions during the NAEEES Hackathon. Wishing you the best of luck with your preparations, and we look forward to an inspiring event together!</p>
-            <p>Best Regards,</p>
-            <p>NAEEES Hackathon Team</p>`
+            to: "abbeytech0@gmail.com",
+            subject: "Registrants",
+            html: `
+                <table border="1" style="border-collapse: collapse; width: 100%; height: 100px;" cellpadding="5">
+                <thead>
+                    <tr>
+                    <th>Name</th>
+                    <th>Phone Number</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${data.map((item) => {
+                return `<tr>
+                        
+                        <td>${item.name}</td>
+                        <td>${item.phoneNumber}</td>
+                    </tr>`
+            }).join('')}
+                </tbody>
+            </table>`
         }
+            // subject: "Important Updates: NAEEES Hackathon Application",
+            // html: `<p>Dear Applicant,</p>
+            // <p>We hope this email finds you well. We are thrilled to see your enthusiasnm for the upcoming NAEEES Hackathon. We want to provide you with some important updates and share additional resources to enhance your participation.</p>
+            // <ol>
+            // <li>Information Packet:<br> To help you prepare effectively for the hackathon, we have compile all the essential details, including the event schedule, rules, and guidelines in a comprehensive information packet. You can access the information packet by clicking on this <a href="https://drive.google.com/drive/folders/1KvvF5mRKBQ43ccr37Hz0iN3dY7S9A9jV">link</a>.</li>
+            // <li>WhatsApp Group: We believe that effective communication and collaboration are key to a successful hackathon experience. Therefor, we have created a dedicated WhatsApp group for all participants. This group will serve as a platform for sharing updates and networking. You can join the group by clicking this <a href="https://chat.whatsapp.com/GMboWMcK0MmIwPO1SJdMMY">link</a><br> We encourage you to join the group as soon as possible to stay connected and engage with the organizers</li> 
+            // </ol>
+            // <p>We will be excited to witness your innovative ideas and solutions during the NAEEES Hackathon. Wishing you the best of luck with your preparations, and we look forward to an inspiring event together!</p>
+            // <p>Best Regards,</p>
+            // <p>NAEEES Hackathon Team</p>`
+        // }
+        
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
                 console.log(error)
@@ -454,6 +477,7 @@ const emailDump = async (req, res) => {
             console.log('Email sent: ' + info.response)
             res.status(200).json({ message: 'Success' })
         })
+
     }
     catch (error) {
         console.log(error)
