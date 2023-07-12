@@ -125,6 +125,7 @@ const registerTeam = async (req, res) => {
                 console.log(error)
             } else {
                 console.log('Email sent: ' + info.response)
+                res.status(201).json({ message: 'Registration Success!', teamName: newTeam.teamName })
             }
         })
 
@@ -136,8 +137,6 @@ const registerTeam = async (req, res) => {
                 console.log('Email Sent: ' + info.response)
             }
         })
-
-        res.status(201).json({ message: 'Registration Success!', teamName: newTeam.teamName })
     } catch (error) {
         console.log(error)
         res.status(500).json({ msg: error.message })
